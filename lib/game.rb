@@ -1,14 +1,16 @@
 require_relative 'snake'
 
 class Game
-  WIDTH = 30
-  HEIGHT = 30
+  WIDTH = 10
+  HEIGHT = 10
 
-  attr_reader :snake, :food
+  attr_reader :snake, :food, :width, :height
 
-  def initialize(snake: nil)
+  def initialize(snake: nil, width: WIDTH, height: HEIGHT)
     @snake = snake
     @food = nil
+    @width = width
+    @height = height
 
     if snake.nil?
       reset_game
@@ -17,7 +19,8 @@ class Game
     generate_food
   end
 
-  def tick
+  def tick(direction)
+    snake.set_direction(direction)
     # move head first to check for collision and food eating
     snake.move_head
 
@@ -40,10 +43,6 @@ class Game
 
   def speed
     snake.body.length / 10
-  end
-
-  def set_snake_direction(direction)
-    snake.set_direction(direction)
   end
 
   # moves sneak out of bounds to the opposite side of the viewport
