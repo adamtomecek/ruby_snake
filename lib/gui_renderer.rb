@@ -31,8 +31,8 @@ class GuiRenderer
         # allow only one direction change per game tick
         game.tick(direction)
 
-        render_body(game.snake.body)
         render_head(game.snake.head)
+        render_tail(game.snake.tail)
         render_food(game.food)
 
         # Text.new(get :fps)
@@ -58,8 +58,8 @@ class GuiRenderer
     render_square(food[0], food[1], color: 'red')
   end
 
-  def render_body(body)
-    body.each do |square|
+  def render_tail(tail)
+    tail.each do |square|
       render_square(square[0], square[1])
     end
   end

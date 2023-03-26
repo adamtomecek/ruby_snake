@@ -1,14 +1,21 @@
 class Snake
-  attr_reader :head, :body, :direction
+  attr_reader :body, :direction
 
-  def initialize(direction: :up, head: [0, 0], body: [])
+  def initialize(direction: :up, body: [[0, 0]])
     @direction = direction
-    @head = head
     @body = body
   end
 
   def collision?
-    body.include?(head)
+    tail.include?(head)
+  end
+
+  def head
+    body.last
+  end
+
+  def tail
+    body[0..-2]
   end
 
   def set_direction(new_direction)
@@ -23,31 +30,42 @@ class Snake
     @direction = new_direction
   end
 
-  def move_head
-    case direction
-    when :up
-      head[1] -= 1
-    when :down
-      head[1] += 1
-    when :right
-      head[0] += 1
-    when :left
-      head[0] -= 1
+  def move(food = nil)
+    move_head
+
+    if food && food_eaten?(food)
+      @body = body
     else
-      raise "Unknown direction"
+      @body = body[1..]
     end
-  end
-
-  def move_body
-    @body << head.clone
-    @body = body[1..-1]
-  end
-
-  def eat
-    body << head.clone
   end
 
   def food_eaten?(food)
     head == food
+  end
+
+  private
+
+  def eat
+    @body = [head] + body
+  end
+
+  def move_head
+    new_head = head.clone
+
+    case direction
+    when :up
+      new_head[1] -= 1
+    when :down
+      new_head[1] += 1
+    when :right
+      new_head[0] += 1
+    when :left
+      new_head[0] -= 1
+    else
+      raise "Unknown direction"
+    end
+
+    body.push(new_head)
   end
 end

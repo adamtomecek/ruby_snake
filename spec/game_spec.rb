@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'game'
 
 RSpec.describe Game do
-  let(:snake) { Snake.new(head: [0, 0]) }
+  let(:snake) { Snake.new(body: [[0, 0]]) }
   let(:game) { described_class.new(snake: snake) }
 
   it 'generates food' do
@@ -53,9 +53,7 @@ RSpec.describe Game do
     it 'food is eaten' do
       allow(game).to receive(:food_eaten?).and_return(true)
 
-      expect(snake).to receive(:move_head)
-      expect(snake).to receive(:eat)
-      expect(snake).not_to receive(:move_body)
+      expect(snake).to receive(:move)
       expect(game).to receive(:generate_food)
 
       game.tick
@@ -64,9 +62,7 @@ RSpec.describe Game do
     it 'food is not eaten' do
       allow(game).to receive(:food_eaten?).and_return(false)
 
-      expect(snake).to receive(:move_head)
-      expect(snake).not_to receive(:eat)
-      expect(snake).to receive(:move_body)
+      expect(snake).to receive(:move)
       expect(game).not_to receive(:generate_food)
 
       game.tick

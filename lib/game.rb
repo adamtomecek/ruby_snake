@@ -19,10 +19,10 @@ class Game
     generate_food
   end
 
-  def tick(direction)
+  def tick(direction = :right)
     snake.set_direction(direction)
     # move head first to check for collision and food eating
-    snake.move_head
+    snake.move(food)
 
     # snake collided with its body, reset game
     if collision?
@@ -34,10 +34,7 @@ class Game
     move_out_of_bounds
 
     if food_eaten?
-      snake.eat
       generate_food
-    else
-      snake.move_body
     end
   end
 
@@ -59,6 +56,7 @@ class Game
   end
 
   private
+
   def collision?
     snake.collision?
   end
@@ -74,16 +72,13 @@ class Game
     loop do
       @food = [rand(WIDTH), rand(HEIGHT)]
 
-      unless snake.body.include?(food)
-        break
-      end
+      break unless snake.body.include?(food)
     end
   end
 
   def reset_game
-    head = [2, 0]
     body = [[0, 0], [1, 0], [2, 0]]
 
-    @snake = Snake.new(direction: :right, head: head, body: body)
+    @snake = Snake.new(direction: :right, body: body)
   end
 end

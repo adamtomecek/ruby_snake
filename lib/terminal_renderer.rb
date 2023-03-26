@@ -17,7 +17,6 @@ class TerminalRenderer
       tick = 0
       IO.console.raw do
         loop do
-          pp game.speed
           if tick % (30 / (1 + game.speed)) == 0
             tick = 0
 
@@ -42,8 +41,8 @@ class TerminalRenderer
 
   def render
     clear_screen
-    render_body
     render_head
+    render_tail
     render_food
     move_cursor(game.width + 2, game.height + 2)
   end
@@ -58,8 +57,8 @@ class TerminalRenderer
     render_symbol(x: food[0] + 1, y: food[1] + 1, char: FOOD, color: :red)
   end
 
-  def render_body
-    body.each do |square|
+  def render_tail
+    tail.each do |square|
       render_symbol(x: square[0] + 1, y: square[1] + 1, char: BODY, color: :b_blue)
     end
   end
@@ -115,8 +114,6 @@ class TerminalRenderer
       :left
     when "l"
       :right
-    else
-      pp char
     end
   end
 
@@ -124,8 +121,8 @@ class TerminalRenderer
     game.snake.head
   end
 
-  def body
-    game.snake.body
+  def tail
+    game.snake.tail
   end
 
   def food
